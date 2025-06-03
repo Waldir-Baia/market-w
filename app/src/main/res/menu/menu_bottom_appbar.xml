@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/icon_store"
+        android:enabled="true"
+        android:icon="@drawable/icon_store"
+        android:title="@string/shop" />
+
+    <item
+        android:id="@+id/icon_search"
+        android:enabled="true"
+        android:icon="@drawable/icon_search"
+        android:title="@string/search" />
+
+
+    <item
+        android:id="@+id/icon_cart"
+        android:enabled="true"
+        android:icon="@drawable/icon_cart"
+        android:title="@string/cart" />
+
+
+    <item
+        android:id="@+id/icon_favorite"
+        android:enabled="true"
+        android:icon="@drawable/icon_favorite"
+        android:title="@string/favorite" />
+
+    <item
+        android:id="@+id/icon_account"
+        android:icon="@drawable/icon_account"
+        android:title="@string/account" />
+
+</menu>
