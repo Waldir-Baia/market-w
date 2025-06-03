@@ -12,7 +12,7 @@ import br.com.atlantasistemas.market_w.ui.diff.ProdutoDiffCallback
 import br.com.atlantasistemas.market_w.ui.interface_listener.ProdutoClickedListener
 
 class ProdutoAdapter(
-    private val listener: ProdutoClickedListener
+    private val listener: ProdutoClickedListener,
 ) : ListAdapter<Produtos, ProdutoAdapter.ProdutoViewHolder>(ProdutoDiffCallback){
     override fun onCreateViewHolder(
         parent: ViewGroup,
