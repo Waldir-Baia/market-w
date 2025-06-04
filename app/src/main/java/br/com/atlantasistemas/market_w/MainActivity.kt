@@ -9,6 +9,7 @@ import br.com.atlantasistemas.market_w.data.entities.Produtos
 import br.com.atlantasistemas.market_w.databinding.ActivityMainBinding
 import br.com.atlantasistemas.market_w.ui.MainActivityViewModel
 import br.com.atlantasistemas.market_w.ui.adapter.ProdutoAdapter
+import br.com.atlantasistemas.market_w.ui.fragment.MainFragment
 import br.com.atlantasistemas.market_w.ui.interface_listener.ProdutoClickedListener
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,13 +27,37 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Carrega o fragmento inicial se ainda não estiver carregado
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, MainFragment())
+                .commit()
+            // Marcar o item inicial como selecionado no BottomNavigation
+            binding.bottomNavigation.selectedItemId = R.id.icon_store
+        }
+
         iniciarFormulario()
 
-
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            val fragment = when(item.itemId){
+                R.id.icon_store -> MainFragment()
+                R.id.icon_search -> MainFragment()
+                R.id.icon_cart -> MainFragment()
+                R.id.icon_favorite -> MainFragment()
+                R.id.icon_account -> MainFragment()
+                else -> MainFragment()
+            }
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit()
+            true
+        }
     }
 
     private fun iniciarFormulario() {
-        binding.recyclerPromocao.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+//        binding.recyclerPromocao.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+//        binding.recyclerMaisVendidos.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+//        binding.recyclerMenosVendidos.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         configureObservers()
 
@@ -53,7 +78,9 @@ class MainActivity : AppCompatActivity() {
 
                 }
             })
-            binding.recyclerPromocao.adapter = adapterProduto
+//            binding.recyclerPromocao.adapter = adapterProduto
+//            binding.recyclerMaisVendidos.adapter = adapterProduto
+//            binding.recyclerMenosVendidos.adapter = adapterProduto
         }
         adapterProduto.submitList(produtos)
 

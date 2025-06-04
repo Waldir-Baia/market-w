@@ -1,8 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.Marketw" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
     <style name="Theme.Marketw" parent="Base.Theme.Marketw" />
@@ -11,6 +8,15 @@
     </style>
 
     <style name="CustomSearchBarShape" parent="">
-        <item name="cornerSize">20dp</item> <!-- menos arredondado -->
+        <item name="cornerSize">20dp</item> </style>
+
+
+    <style name="Widget.App.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemActiveIndicatorStyle">@style/BottomNavActiveIndicator</item>
     </style>
+
+    <style name="BottomNavActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/green_500</item>
+    </style>
+
 </resources>
