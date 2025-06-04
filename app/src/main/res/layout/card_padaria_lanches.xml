@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp">
+        android:padding="20dp">
 
         <!-- TÍTULO -->
         <com.google.android.material.imageview.ShapeableImageView
@@ -33,7 +33,7 @@
             style="?attr/textAppearanceHeadline6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="15dp"
             android:gravity="center_horizontal"
             android:text="@string/titulo_padaria_laches"
             app:layout_constraintEnd_toEndOf="parent"

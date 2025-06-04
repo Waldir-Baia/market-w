@@ -6,9 +6,9 @@
     android:layout_height="200dp"
     android:layout_gravity="center"
     android:layout_margin="3dp"
-    android:backgroundTint="@color/orange_transparente_10"
+    android:backgroundTint="@color/azul_claro_25"
     android:elevation="4dp"
-    app:strokeColor="@color/orange_transparente_70">
+    app:strokeColor="@color/azul_claro_100">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/img_azeite_s_fundo"
+            android:src="@drawable/img_bebidas"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.6"
             app:layout_constraintHorizontal_bias="0.0"
@@ -33,9 +33,9 @@
             style="?attr/textAppearanceHeadline6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="42dp"
             android:gravity="center_horizontal"
-            android:text="@string/titulo_oleo_azeite"
+            android:text="@string/titulo_bebidas"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/product_image" />

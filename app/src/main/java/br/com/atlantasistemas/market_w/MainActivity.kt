@@ -10,6 +10,7 @@ import br.com.atlantasistemas.market_w.databinding.ActivityMainBinding
 import br.com.atlantasistemas.market_w.ui.MainActivityViewModel
 import br.com.atlantasistemas.market_w.ui.adapter.ProdutoAdapter
 import br.com.atlantasistemas.market_w.ui.fragment.MainFragment
+import br.com.atlantasistemas.market_w.ui.fragment.SearchFragment
 import br.com.atlantasistemas.market_w.ui.interface_listener.ProdutoClickedListener
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             val fragment = when(item.itemId){
                 R.id.icon_store -> MainFragment()
-                R.id.icon_search -> MainFragment()
+                R.id.icon_search -> SearchFragment()
                 R.id.icon_cart -> MainFragment()
                 R.id.icon_favorite -> MainFragment()
                 R.id.icon_account -> MainFragment()
