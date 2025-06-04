@@ -17,5 +17,6 @@
     <color name="amarelo_100">#FFFDE598</color>
     <color name="azul_claro_100">#B7DFF5</color>
     <color name="azul_claro_25">#40B7DFF5</color>
+    <color name="gray">#333333</color>
 
 </resources>
