@@ -7,4 +7,9 @@
     <string name="account">Account</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="titulo_fruta_fresta">Frutas Frescas &amp; Vegetais</string>
+    <string name="titulo_oleo_azeite">Oleo Cozinha &amp; Azeites</string>
+    <string name="titulo_carne_peixes">Carnes     &amp; Peixes</string>
+    <string name="titulo_padaria_laches">Padaria &amp; Lanches</string>
+    <string name="titulo_laticinios">Laticínios &amp; Ovos  </string>
 </resources>

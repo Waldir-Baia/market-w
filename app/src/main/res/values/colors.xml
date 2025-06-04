@@ -5,4 +5,14 @@
     <color name="green_500">#53B175</color>
     <color name="green_700">#388E3C</color>
     <color name="green_transparente_10">#1A53B175</color>
+    <color name="green_transparente_70">#B353B175</color>
+    <color name="orange_transparente_10">#1AF8A44C</color>
+    <color name="orange_transparente_70">#B3F8A44C</color>
+    <color name="cor_card_carne_10">#1AF7A593</color>
+    <color name="cor_card_carne_70">#B3F7A593</color>
+    <color name="roxa_10">#1AD3B0E0</color>
+    <color name="roxa_70">#B3D3B0E0</color>
+    <color name="amarero_10">#1AFDE598</color>
+    <color name="amarelo_100">#FFFDE598</color>
+
 </resources>
