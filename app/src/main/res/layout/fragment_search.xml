@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragment.SearchFragment">
+
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,27 +22,52 @@
             android:orientation="vertical"
             android:padding="8dp">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Encontrar Produto"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+
+                <!-- Barra de busca com margens laterais -->
+                <com.google.android.material.search.SearchBar
+                    android:id="@+id/main_search_bar"
+                    style="@style/CustomSearchBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"/>
+
+            </LinearLayout>
+
             <!-- Primeira linha com 2 cards -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                android:weightSum="2"
-                android:layout_marginBottom="8dp">
+                android:weightSum="2">
 
                 <include
                     layout="@layout/card_frutas_vegetais"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="4dp" />
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1" />
 
                 <include
                     layout="@layout/card_oleo_azeite"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="4dp" />
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
@@ -56,15 +82,15 @@
                     layout="@layout/card_carne_peixes"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="4dp" />
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1" />
 
                 <include
                     layout="@layout/card_padaria_lanches"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="4dp" />
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
@@ -72,23 +98,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                android:weightSum="2"
-                android:layout_marginTop="10dp">
+                android:weightSum="2">
 
                 <include
                     layout="@layout/card_leites_queijo"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="4dp" />
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1" />
 
                 <include
                     layout="@layout/card_bebidas"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="4dp" />
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
