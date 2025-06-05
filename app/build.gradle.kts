@@ -66,4 +66,7 @@ dependencies {
     implementation(libs.dagger.hilt)
     ksp(libs.hilt.compiler)
     implementation (libs.androidx.hilt.navigation.fragment)
+
+    //Coil
+    implementation(libs.coil)
 }
