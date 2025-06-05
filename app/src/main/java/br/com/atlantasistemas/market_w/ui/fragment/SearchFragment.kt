@@ -30,8 +30,6 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureObservers()
-        //Aqui eu acesso as minhas views
-
 
     }
 

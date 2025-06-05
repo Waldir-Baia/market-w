@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.atlantasistemas.market_w.data.entities.Produtos
 import br.com.atlantasistemas.market_w.databinding.ActivityMainBinding
 import br.com.atlantasistemas.market_w.ui.MainActivityViewModel
+import br.com.atlantasistemas.market_w.ui.adapter.FavoriteFragment
 import br.com.atlantasistemas.market_w.ui.adapter.ProdutoAdapter
 import br.com.atlantasistemas.market_w.ui.fragment.CartFragment
 import br.com.atlantasistemas.market_w.ui.fragment.MainFragment
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.icon_store -> MainFragment()
                 R.id.icon_search -> SearchFragment()
                 R.id.icon_cart -> CartFragment()
-                R.id.icon_favorite -> MainFragment()
+                R.id.icon_favorite -> FavoriteFragment()
                 R.id.icon_account -> MainFragment()
                 else -> MainFragment()
             }
