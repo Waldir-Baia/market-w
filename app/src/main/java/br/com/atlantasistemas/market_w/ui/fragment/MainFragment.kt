@@ -41,6 +41,8 @@ class MainFragment : Fragment() {
         binding.recyclerMenosVendidos.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
 
+
+
     }
 
     private fun configureObservers(){

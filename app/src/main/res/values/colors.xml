@@ -18,5 +18,6 @@
     <color name="azul_claro_100">#B7DFF5</color>
     <color name="azul_claro_25">#40B7DFF5</color>
     <color name="gray">#333333</color>
+    <color name="color_search">#F2F3F2</color>
 
 </resources>
