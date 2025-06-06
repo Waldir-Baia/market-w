@@ -43,26 +43,11 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MainActivityViewModel by activityViewModels()
-    private val mapsViewModel: MapsViewModel by viewModels()
+    //private val mapsViewModel: MapsViewModel by viewModels()
 
     // NOVO: Lista que conterá todos os produtos disponíveis para pesquisa
     private var allAvailableProducts: MutableList<Produtos> = mutableListOf()
 
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-        val fineLocationGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false
-        val coarseLocationGranted = permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
-
-        if (fineLocationGranted || coarseLocationGranted) {
-            mapsViewModel.getUserCity()
-        } else {
-            Toast.makeText(
-                requireContext(),
-                "Permissão de localização negada. Não é possível obter a cidade.",
-                Toast.LENGTH_LONG
-            ).show()
-            binding.locationText.text = "Localização indisponível"
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,7 +62,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        Log.d("WBN_ViewModelAccess", "Acessando mapsViewModel no onCreate. Hash: ${mapsViewModel.hashCode()}")
+        //Log.d("WBN_ViewModelAccess", "Acessando mapsViewModel no onCreate. Hash: ${mapsViewModel.hashCode()}")
 
         // Seus RecyclerViews principais - mantidos inalterados
         binding.recyclerPromocao.layoutManager =
@@ -140,7 +125,6 @@ class MainFragment : Fragment() {
             }
         }
         configureObservers()
-        checkLocationPermissions()
     }
 
     private fun createProdutoClickedListener(): ProdutoClickedListener {
@@ -184,10 +168,10 @@ class MainFragment : Fragment() {
             allAvailableProducts.addAll(result.filter { it !in allAvailableProducts })
         }
 
-        mapsViewModel.cityName.observe(viewLifecycleOwner) { result ->
-            Log.d("WBN_Maps", "${result}")
-            binding.locationText.text = result
-        }
+//        mapsViewModel.cityName.observe(viewLifecycleOwner) { result ->
+//            Log.d("WBN_Maps", "${result}")
+//            binding.locationText.text = result
+//        }
 
     }
 
@@ -245,43 +229,4 @@ class MainFragment : Fragment() {
             }
     }
 
-    private fun checkLocationPermissions() {
-        when {
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                mapsViewModel.getUserCity()
-            }
-
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                mapsViewModel.getUserCity()
-            }
-
-            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                Toast.makeText(
-                    requireContext(),
-                    "Precisamos da sua localização para mostrar a cidade.",
-                    Toast.LENGTH_LONG
-                ).show()
-                requestPermissionLauncher.launch(
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    )
-                )
-            }
-            else -> {
-                requestPermissionLauncher.launch(
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    )
-                )
-            }
-        }
-    }
 }
