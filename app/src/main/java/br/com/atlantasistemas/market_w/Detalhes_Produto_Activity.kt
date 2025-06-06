@@ -20,6 +20,8 @@ class Detalhes_Produto_Activity : AppCompatActivity() {
     private lateinit var binding: ActivityDetalhesProdutoBinding
 
     private val viewModel : DetalhesProdutoViewModel by viewModels()
+    private var quantidade = 1
+    private var precoUnitario = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +39,14 @@ class Detalhes_Produto_Activity : AppCompatActivity() {
             startActivity(Intent(this@Detalhes_Produto_Activity, MainActivity::class.java))
         }
 
+        binding.btnMinus.setOnClickListener {
+            viewModel.diminuirQuantidade()
+        }
+
+        binding.btnPlus.setOnClickListener {
+            viewModel.aumentarQuantidade()
+        }
+
     }
 
     private fun iniciarFormulario(){
@@ -47,22 +57,26 @@ class Detalhes_Produto_Activity : AppCompatActivity() {
         viewModel.dadosProdutoViewModel.observe(this) { result ->
             setaValoresUI(result)
         }
+
+        viewModel.precoTotal.observe(this) { result ->
+            binding.txtPrice.text = formatarParaRealBrasileiro(result)
+        }
+
+        viewModel.quantidade.observe(this) { result ->
+            binding.txtQuantity.text = result.toString()
+        }
     }
 
     private fun setaValoresUI(produto: Produtos){
         binding.txtTitle.text = produto.nomeProduto
         binding.txtDetail.text = produto.descricao
-        binding.txtPrice.text = formatarParaRealBrasileiro(produto.valor)
-
         binding.imgProduct.load(produto.imageProduto){
             placeholder(R.drawable.icon_inventory)
             error(R.drawable.icon_cloud)
             crossfade(true)
             transformations(RemoveWhiteBackgroundTransformation())
         }
-
     }
-
 }
 
 
