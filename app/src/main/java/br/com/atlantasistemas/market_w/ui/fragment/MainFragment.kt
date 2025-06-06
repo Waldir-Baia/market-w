@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.atlantasistemas.market_w.Detalhes_Produto_Activity
 import br.com.atlantasistemas.market_w.R
-import br.com.atlantasistemas.market_w.Utils.dadosProdutoGlobal
+import br.com.atlantasistemas.market_w.utils.Utils.dadosProdutoGlobal
 import br.com.atlantasistemas.market_w.data.entities.Produtos
 import br.com.atlantasistemas.market_w.databinding.FragmentMainBinding
 import br.com.atlantasistemas.market_w.ui.MainActivityViewModel

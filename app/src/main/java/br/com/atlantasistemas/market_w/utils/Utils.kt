@@ -1,4 +1,4 @@
-package br.com.atlantasistemas.market_w
+package br.com.atlantasistemas.market_w.utils
 
 import androidx.lifecycle.MutableLiveData
 import br.com.atlantasistemas.market_w.data.entities.Produtos

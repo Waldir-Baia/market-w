@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.atlantasistemas.market_w.R
-import br.com.atlantasistemas.market_w.Utils.formatarParaRealBrasileiro
+import br.com.atlantasistemas.market_w.utils.Utils.formatarParaRealBrasileiro
 import br.com.atlantasistemas.market_w.data.entities.Produtos
 import br.com.atlantasistemas.market_w.ui.diff.ProdutoDiffCallback
 import br.com.atlantasistemas.market_w.ui.interface_listener.AddButtonClickListener
