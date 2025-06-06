@@ -19,4 +19,8 @@
         <item name="android:color">@color/green_500</item>
     </style>
 
+    <style name="MySearchViewStyle" parent="Widget.Material3.SearchView">
+        <item name="android:background">@color/white</item>
+    </style>
+
 </resources>

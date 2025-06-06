@@ -1,9 +1,11 @@
 package br.com.atlantasistemas.market_w
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.atlantasistemas.market_w.data.entities.Produtos
 import br.com.atlantasistemas.market_w.databinding.ActivityMainBinding
@@ -33,11 +35,16 @@ class MainActivity : AppCompatActivity() {
         // Carrega o fragmento inicial se ainda não estiver carregado
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, MainFragment())
+                .replace(R.id.nav_host_fragment, MainFragment())
                 .commit()
             // Marcar o item inicial como selecionado no BottomNavigation
             binding.bottomNavigation.selectedItemId = R.id.icon_store
         }
+
+        val navController = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+            ?.findNavController()
+
+        Log.d("WBN_MainActivity", "NavController: $navController")
 
         iniciarFormulario()
 
@@ -51,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                 else -> MainFragment()
             }
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
+                .replace(R.id.nav_host_fragment, fragment)
                 .commit()
             true
         }
