@@ -1,6 +1,7 @@
 package br.com.atlantasistemas.market_w.ui.fragment
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
@@ -16,9 +17,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import br.com.atlantasistemas.market_w.Detalhes_Produto_Activity
 import br.com.atlantasistemas.market_w.R
+import br.com.atlantasistemas.market_w.Utils.dadosProdutoGlobal
 import br.com.atlantasistemas.market_w.data.entities.Produtos
 import br.com.atlantasistemas.market_w.databinding.FragmentMainBinding
 import br.com.atlantasistemas.market_w.ui.MainActivityViewModel
@@ -61,8 +65,7 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        //Log.d("WBN_ViewModelAccess", "Acessando mapsViewModel no onCreate. Hash: ${mapsViewModel.hashCode()}")
+        dadosProdutoGlobal = MutableLiveData<Produtos>()
 
         // Seus RecyclerViews principais - mantidos inalterados
         binding.recyclerPromocao.layoutManager =
@@ -130,13 +133,8 @@ class MainFragment : Fragment() {
     private fun createProdutoClickedListener(): ProdutoClickedListener {
         return object : ProdutoClickedListener {
             override fun produtoClickerListener(viewProduto: Produtos) {
-                Toast.makeText(
-                    context,
-                    "Produto clicado: ${viewProduto.nomeProduto}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                // Sua lógica de navegação ou outra ação aqui
-                // Ex: findNavController().navigate(R.id.action_MainFragment_to_DetailFragment, bundleOf("produtoId" to viewProduto.id))
+                dadosProdutoGlobal.value = viewProduto
+                startActivity(Intent(requireContext(), Detalhes_Produto_Activity::class.java))
             }
         }
     }
