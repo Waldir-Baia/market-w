@@ -1,8 +1,11 @@
 package br.com.atlantasistemas.market_w
 
+import android.Manifest
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
@@ -10,11 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.atlantasistemas.market_w.data.entities.Produtos
 import br.com.atlantasistemas.market_w.databinding.ActivityMainBinding
 import br.com.atlantasistemas.market_w.ui.MainActivityViewModel
+import br.com.atlantasistemas.market_w.ui.MapsViewModel
 import br.com.atlantasistemas.market_w.ui.adapter.FavoriteFragment
 import br.com.atlantasistemas.market_w.ui.adapter.ProdutoAdapter
 import br.com.atlantasistemas.market_w.ui.fragment.CartFragment
 import br.com.atlantasistemas.market_w.ui.fragment.MainFragment
 import br.com.atlantasistemas.market_w.ui.fragment.SearchFragment
+import br.com.atlantasistemas.market_w.ui.interface_listener.AddButtonClickListener
 import br.com.atlantasistemas.market_w.ui.interface_listener.ProdutoClickedListener
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -83,16 +88,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun atualizaUiProdutoPromocao(produtos: List<Produtos>) {
         if (!::adapterProduto.isInitialized) {
-            adapterProduto = ProdutoAdapter(object : ProdutoClickedListener {
-                override fun produtoClickerListener(viewProduto: Produtos) {
+            adapterProduto = ProdutoAdapter(
+                object : ProdutoClickedListener {
+                    override fun produtoClickerListener(viewProduto: Produtos) {
 
+                    }
+                },
+                object : AddButtonClickListener{
+                    override fun onAddButtonClick(produto: Produtos) {
+                        Toast.makeText(this@MainActivity, "${produto.nomeProduto}", Toast.LENGTH_LONG).show()
+                    }
                 }
-            })
+            )
 //            binding.recyclerPromocao.adapter = adapterProduto
 //            binding.recyclerMaisVendidos.adapter = adapterProduto
 //            binding.recyclerMenosVendidos.adapter = adapterProduto
         }
         adapterProduto.submitList(produtos)
-
     }
+
+
 }

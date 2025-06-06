@@ -1,34 +1,37 @@
 package br.com.atlantasistemas.market_w.ui.fragment
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo // Importe esta classe para IME_ACTION_SEARCH
-import android.widget.Toast // Para mensagens temporárias
+import android.view.inputmethod.EditorInfo
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-// import androidx.navigation.Navigation // Não alterado, se não estiver usando, pode remover
-import androidx.navigation.fragment.findNavController // Já importado
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.GridLayoutManager // IMPORTANTE: Importe GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.atlantasistemas.market_w.R
 import br.com.atlantasistemas.market_w.data.entities.Produtos
 import br.com.atlantasistemas.market_w.databinding.FragmentMainBinding
 import br.com.atlantasistemas.market_w.ui.MainActivityViewModel
+import br.com.atlantasistemas.market_w.ui.MapsViewModel
 import br.com.atlantasistemas.market_w.ui.adapter.ProdutoAdapter
 import br.com.atlantasistemas.market_w.ui.adapter.ProdutoFavoritoAdapter
+import br.com.atlantasistemas.market_w.ui.interface_listener.AddButtonClickListener
 import br.com.atlantasistemas.market_w.ui.interface_listener.ProdutoClickedListener
-import com.google.android.material.search.SearchBar // IMPORTANTE: Importe SearchBar
-import com.google.android.material.search.SearchView // IMPORTANTE: Importe SearchView
+import com.google.android.material.search.SearchView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
-    // Seus adapters existentes para os RecyclerViews principais
     private lateinit var adapterPromocao: ProdutoAdapter
     private lateinit var adapterMaisVendidos: ProdutoAdapter
     private lateinit var adapterMenosVendidos: ProdutoAdapter
@@ -40,9 +43,26 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MainActivityViewModel by activityViewModels()
+    private val mapsViewModel: MapsViewModel by viewModels()
 
     // NOVO: Lista que conterá todos os produtos disponíveis para pesquisa
     private var allAvailableProducts: MutableList<Produtos> = mutableListOf()
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        val fineLocationGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false
+        val coarseLocationGranted = permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
+
+        if (fineLocationGranted || coarseLocationGranted) {
+            mapsViewModel.getUserCity()
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "Permissão de localização negada. Não é possível obter a cidade.",
+                Toast.LENGTH_LONG
+            ).show()
+            binding.locationText.text = "Localização indisponível"
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,42 +70,44 @@ class MainFragment : Fragment() {
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Seus RecyclerViews principais - mantidos inalterados
-        binding.recyclerPromocao.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerMaisVendidos.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerMenosVendidos.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        // Inicialização dos adapters para os RecyclerViews principais
-        // Garante que os adapters são inicializados antes de serem usados, se não estiverem já.
-        // Seus adaptadores devem ser instanciados uma vez.
-        adapterPromocao = ProdutoAdapter(createProdutoClickedListener())
-        adapterMaisVendidos = ProdutoAdapter(createProdutoClickedListener())
-        adapterMenosVendidos = ProdutoAdapter(createProdutoClickedListener())
+        Log.d("WBN_ViewModelAccess", "Acessando mapsViewModel no onCreate. Hash: ${mapsViewModel.hashCode()}")
+
+        // Seus RecyclerViews principais - mantidos inalterados
+        binding.recyclerPromocao.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerMaisVendidos.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerMenosVendidos.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        adapterPromocao =
+            ProdutoAdapter(createProdutoClickedListener(), addButtonProdutoClickedListener())
+        adapterMaisVendidos =
+            ProdutoAdapter(createProdutoClickedListener(), addButtonProdutoClickedListener())
+        adapterMenosVendidos =
+            ProdutoAdapter(createProdutoClickedListener(), addButtonProdutoClickedListener())
 
         binding.recyclerPromocao.adapter = adapterPromocao
         binding.recyclerMaisVendidos.adapter = adapterMaisVendidos
         binding.recyclerMenosVendidos.adapter = adapterMenosVendidos
 
-        // NOVO: Inicializa o adapter para o RecyclerView DENTRO do SearchView
-        // Este adapter usará o mesmo layout de card_produtos para as sugestões/resultados da busca.
-        searchViewAdapter = ProdutoFavoritoAdapter(createProdutoClickedListener()) // Reutiliza o listener de clique
+        searchViewAdapter =
+            ProdutoFavoritoAdapter(createProdutoClickedListener()) // Reutiliza o listener de clique
 
-        // NOVO: Configura o RecyclerView dentro do SearchView para ser um Grid (2 colunas)
         binding.searchView.findViewById<RecyclerView>(R.id.search_results_list).apply {
             layoutManager = LinearLayoutManager(requireContext()) // 2 cards por linha
             adapter = searchViewAdapter
         }
 
-        // NOVO: Conecta o SearchBar (main_search_bar) ao SearchView (search_view)
-        // Isso habilita a transição animada e a funcionalidade de pesquisa do Material Design.
         binding.searchView.setupWithSearchBar(binding.mainSearchBar)
 
-        // NOVO: Listener para mudanças no texto digitado no campo de busca do SearchView
         binding.searchView.editText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -101,7 +123,6 @@ class MainFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // NOVO: Listener para o evento de "Pesquisar" (Enter) no teclado
         binding.searchView.editText.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val query = binding.searchView.text.toString()
@@ -112,30 +133,44 @@ class MainFragment : Fragment() {
             false // Indica que o evento não foi consumido (se não for IME_ACTION_SEARCH)
         }
 
-        // NOVO: Listener para quando o SearchView é aberto ou fechado (para carregar sugestões iniciais)
         binding.searchView.addTransitionListener { searchView, previousState, newState ->
             if (newState == SearchView.TransitionState.SHOWN) {
                 // Quando o SearchView é totalmente expandido e visível
                 showInitialSearchSuggestions()
             }
-            // Você pode adicionar lógica para HIDDEN se precisar limpar algo quando fecha.
         }
         configureObservers()
+        checkLocationPermissions()
     }
 
-    // Listener de clique para produtos - mantido inalterado
     private fun createProdutoClickedListener(): ProdutoClickedListener {
         return object : ProdutoClickedListener {
             override fun produtoClickerListener(viewProduto: Produtos) {
-                Toast.makeText(context, "Produto clicado: ${viewProduto.nomeProduto}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "Produto clicado: ${viewProduto.nomeProduto}",
+                    Toast.LENGTH_SHORT
+                ).show()
                 // Sua lógica de navegação ou outra ação aqui
                 // Ex: findNavController().navigate(R.id.action_MainFragment_to_DetailFragment, bundleOf("produtoId" to viewProduto.id))
             }
         }
     }
 
+    private fun addButtonProdutoClickedListener(): AddButtonClickListener {
+        return object : AddButtonClickListener {
+            override fun onAddButtonClick(viewProduto: Produtos) {
+                Toast.makeText(
+                    context,
+                    "Produto Adicionado: ${viewProduto.nomeProduto}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
     // Seu método configureObservers - ALTERADO para popular 'allAvailableProducts'
-    private fun configureObservers(){
+    private fun configureObservers() {
         viewModel.produtoPromocao.observe(viewLifecycleOwner) { result ->
             atualizaUiProdutoPromocao(result)
             allAvailableProducts.addAll(result.filter { it !in allAvailableProducts })
@@ -147,6 +182,11 @@ class MainFragment : Fragment() {
         viewModel.produtoPromocao.observe(viewLifecycleOwner) { result ->
             adapterMenosVendidos.submitList(result)
             allAvailableProducts.addAll(result.filter { it !in allAvailableProducts })
+        }
+
+        mapsViewModel.cityName.observe(viewLifecycleOwner) { result ->
+            Log.d("WBN_Maps", "${result}")
+            binding.locationText.text = result
         }
 
     }
@@ -203,5 +243,45 @@ class MainFragment : Fragment() {
                     // Pode adicionar os parâmetros aqui, se quiser usar mais tarde
                 }
             }
+    }
+
+    private fun checkLocationPermissions() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                mapsViewModel.getUserCity()
+            }
+
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                mapsViewModel.getUserCity()
+            }
+
+            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                Toast.makeText(
+                    requireContext(),
+                    "Precisamos da sua localização para mostrar a cidade.",
+                    Toast.LENGTH_LONG
+                ).show()
+                requestPermissionLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                )
+            }
+            else -> {
+                requestPermissionLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                )
+            }
+        }
     }
 }

@@ -66,7 +66,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_add"
+            android:id="@+id/btn_card_prod_add"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:backgroundTint="@color/green_500"
