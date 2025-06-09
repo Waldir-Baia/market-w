@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.atlantasistemas.market_w.Detalhes_Produto_Activity
 import br.com.atlantasistemas.market_w.R
+import br.com.atlantasistemas.market_w.data.entities.ProdutoCarrinho
 import br.com.atlantasistemas.market_w.utils.Utils.dadosProdutoGlobal
 import br.com.atlantasistemas.market_w.data.entities.Produtos
 import br.com.atlantasistemas.market_w.databinding.FragmentMainBinding
@@ -142,17 +143,27 @@ class MainFragment : Fragment() {
     private fun addButtonProdutoClickedListener(): AddButtonClickListener {
         return object : AddButtonClickListener {
             override fun onAddButtonClick(viewProduto: Produtos) {
-                Toast.makeText(
-                    context,
-                    "Produto Adicionado: ${viewProduto.nomeProduto}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                val carrinhoId = viewModel.carrinho.value?.carrinho?.carrinhoId
+                Log.d("WBN_FragmentMain", "${carrinhoId}")
+                if(carrinhoId != null){
+                    val produto = ProdutoCarrinho(
+                        id = 0,
+                        carrinhoId = carrinhoId,
+                        produtoId = viewProduto.codigo,
+                        nomeProduto = viewProduto.imageProduto,
+                        preco = viewProduto.valor,
+                        quantidade = 1
+                    )
+                    viewModel.adicionarProdutoAoCarrinho(produto)
+                }
             }
         }
     }
 
     // Seu método configureObservers - ALTERADO para popular 'allAvailableProducts'
     private fun configureObservers() {
+        viewModel.carregarCarrinho()
+
         viewModel.produtoPromocao.observe(viewLifecycleOwner) { result ->
             atualizaUiProdutoPromocao(result)
             allAvailableProducts.addAll(result.filter { it !in allAvailableProducts })
@@ -165,11 +176,6 @@ class MainFragment : Fragment() {
             adapterMenosVendidos.submitList(result)
             allAvailableProducts.addAll(result.filter { it !in allAvailableProducts })
         }
-
-//        mapsViewModel.cityName.observe(viewLifecycleOwner) { result ->
-//            Log.d("WBN_Maps", "${result}")
-//            binding.locationText.text = result
-//        }
 
     }
 

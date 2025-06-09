@@ -20,8 +20,6 @@ class Detalhes_Produto_Activity : AppCompatActivity() {
     private lateinit var binding: ActivityDetalhesProdutoBinding
 
     private val viewModel : DetalhesProdutoViewModel by viewModels()
-    private var quantidade = 1
-    private var precoUnitario = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
